@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic Meta Tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Image Converter Tool | Convert PNG, JPG, WEBP</title>
+  <meta name="description" content="Free and fast online image converter tool. Convert images to PNG, JPEG, or WEBP formats easily. Preview and download compressed images. 100% mobile-friendly.">
+  <meta name="keywords" content="image converter, jpg to png, png to webp, online image convert, image conversion tool, compress image online">
+  <meta name="author" content="Your Website Name">
+
+  <!-- Open Graph for Facebook -->
+  <meta property="og:title" content="Free Online Image Converter Tool" />
+  <meta property="og:description" content="Convert your images to PNG, JPEG, or WEBP for free. Mobile-friendly and easy to use." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yourwebsite.com/image-converter" />
+  <meta property="og:image" content="https://yourwebsite.com/assets/preview-image.jpg" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Online Image Converter Tool">
+  <meta name="twitter:description" content="Convert images online to PNG, JPEG, or WEBP easily with our mobile-friendly image conversion tool.">
+  <meta name="twitter:image" content="https://yourwebsite.com/assets/preview-image.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://yourwebsite.com/image-converter">
+
+  <!-- CSS Styles (unchanged from previous version) -->
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --background-color: #ffffff;
+      --accent-color: #e6f0ff;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--background-color);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--accent-color);
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0, 123, 255, 0.2);
+      text-align: center;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    input[type="file"] {
+      margin: 1rem 0;
+    }
+
+    .preview {
+      margin: 1rem 0;
+    }
+
+    .preview img {
+      max-width: 100%;
+      border-radius: 10px;
+      max-height: 300px;
+    }
+
+    select, button {
+      padding: 10px;
+      margin: 1rem 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem;
+        margin: 1rem;
+      }
+
+      select, button {
+        width: 100%;
+        margin: 0.5rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <h1>Online Image Converter</h1>
+    <p>Upload an image and convert it to PNG, JPEG, or WEBP format instantly. 100% free and mobile-friendly.</p>
+    
+    <input type="file" id="imageInput" accept="image/*">
+    
+    <div class="preview" id="preview">
+      <p>No image selected</p>
+    </div>
+
+    <select id="formatSelect">
+      <option value="image/png">PNG</option>
+      <option value="image/jpeg">JPEG</option>
+      <option value="image/webp">WEBP</option>
+    </select>
+
+    <button onclick="convertImage()">Convert & Download</button>
+  </main>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const preview = document.getElementById('preview');
+    let originalImage = null;
+
+    imageInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          originalImage = img;
+          preview.innerHTML = '';
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.innerHTML = '<p>Please upload a valid image file.</p>';
+        originalImage = null;
+      }
+    });
+
+    function convertImage() {
+      const format = document.getElementById('formatSelect').value;
+
+      if (!originalImage) {
+        alert('Please upload an image first.');
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = originalImage.naturalWidth;
+      canvas.height = originalImage.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(originalImage, 0, 0);
+
+      canvas.toBlob(function (blob) {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        const extension = format.split('/')[1];
+        link.download = 'converted-image.' + extension;
+        link.click();
+      }, format);
+    }
+  </script>
+
+</body>
+</html>
